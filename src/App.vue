@@ -10,14 +10,14 @@
         <v-card class="mx-auto my-5" max-width="450">
           <v-layout wrap>
             <p>あなたのアカウント名は？</p>
-            <input v-model="name" placeholder="名前を入力" />
+            <input class="ml-15 hoge" v-model="name" placeholder="名前を入力" />
           </v-layout>
         </v-card>
 
         <v-card class="mx-auto my-5" max-width="450">
           <v-layout wrap>
             <p>あなたのアカウントIDは？</p>
-            <input v-model="id" placeholder="IDを入力" />
+            <input class="ml-15" v-model="id" value="@" placeholder="IDを入力(@つけてね)" />
           </v-layout>
         </v-card>
         
@@ -34,7 +34,8 @@
 
         <v-card class="mx-auto" max-width="344">
           <v-col align="center">
-          <v-btn depressed color="primary" @click="asessment()">診断</v-btn>
+          <v-btn :disabled="myAgreee==false" depressed color="primary" @click="asessment()">診断</v-btn>
+          <v-btn :disabled="myAgreee==false" class="ml-15" depressed color="primary" @click="tweet()">ツイート</v-btn>
           </v-col>
         </v-card>
 
@@ -47,19 +48,43 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
   name: "App",
-
-  components: {},
+  created(){
+    this.db = firebase.firestore()
+    this.accountsRef = this.db.collection('accounts')
+  },
 
   data: () => ({
-    name: "",
-    id: "",
-    gender: ""
+    name: '',
+    id: '',
+    gender: '',
+    db: null,
+    acountsRef: null
     //
   }),
   methods: {
-    asessment() {}
+    asessment() {
+      if(this.id === ''){ return }
+      this.accountsRef.add({
+        name: this.name,
+        id: this.id,
+        gender: this.gender,
+      })
+    },
+    tweet(){
+
+    }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+input {
+  border: 1px solid #000;
+  border-style: solid !important;
+  margin: 8px;
+}
+</style>
