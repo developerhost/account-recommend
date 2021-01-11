@@ -34,13 +34,23 @@
 
         <v-card class="mx-auto" max-width="344">
           <v-col align="center">
-          <v-btn :disabled="myAgreee==false" depressed color="primary" @click="asessment()">診断</v-btn>
-          <v-btn :disabled="myAgreee==false" class="ml-15" depressed color="primary" @click="tweet()">ツイート</v-btn>
+          <v-btn :disabled="!id" depressed color="primary" @click="asessment()">診断</v-btn>
+          <v-btn :disabled="!id" class="ml-15" depressed color="primary" @click="tweet()">ツイート</v-btn>
           </v-col>
         </v-card>
 
         <p>おすすめの裏垢は{{ name }}です</p>
         <p>{{ id }}</p>
+
+        <ul>
+          <li v-for="(account, key) in accounts" :key="key">
+            <!-- {{ account }}
+            {{ key }} -->
+            {{ account.name }}
+            {{ account.id }}
+            {{ account.gender }}
+          </li>
+        </ul>
         
       </div>
     </v-main>
@@ -55,6 +65,13 @@ export default {
   created(){
     this.db = firebase.firestore()
     this.accountsRef = this.db.collection('accounts')
+    this.accountsRef.onSnapshot(querySnapshot => {
+      const obj = {}//データが変わった時の処理
+      querySnapshot.forEach(doc => {
+        obj[doc.id] = doc.data() //doc.id=firebaseのデータベースID。doc.data=firebaseに入れたデータ
+      })
+      this.accounts = obj
+    })
   },
 
   data: () => ({
@@ -62,7 +79,8 @@ export default {
     id: '',
     gender: '',
     db: null,
-    acountsRef: null
+    acountsRef: null,
+    accounts: {} //取得したデータを入れる
     //
   }),
   methods: {
@@ -76,7 +94,7 @@ export default {
     },
     tweet(){
 
-    }
+    },
   }
 };
 </script>
