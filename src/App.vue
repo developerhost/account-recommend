@@ -85,12 +85,21 @@ export default {
   }),
   methods: {
     asessment() {
-      if(this.id === ''){ return }
-      this.accountsRef.add({
-        name: this.name,
-        id: this.id,
-        gender: this.gender,
-      })
+      firebase
+       .firestore()
+       .collection("accounts")
+       .where("id", "==", this.id)
+       .get()
+       .then((res) => {
+     if (res.size < 0){
+           this.accountsRef.add({
+           name: this.name,
+           id: this.id,
+           gender: this.gender,
+     })
+    }
+        })
+
     },
     tweet(){
 
