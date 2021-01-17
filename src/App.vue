@@ -79,9 +79,10 @@ export default {
     id: '',
     gender: '',
     db: null,
-    acountsRef: null,
-    accounts: {} //取得したデータを入れる
-    //
+    accountsRef: null,
+    accounts: [], //取得したデータを入れる
+    account: {},
+    random: null
   }),
   methods: {
     asessment() {
@@ -91,8 +92,10 @@ export default {
        .where("id", "==", this.id)
        .get()
        .then((res) => {
-     if (res.size < 0){
-           this.accountsRef.add({
+     if (res.size < 1){
+       console.log(res);
+       
+           this.accounts.add({
            name: this.name,
            id: this.id,
            gender: this.gender,
@@ -104,6 +107,14 @@ export default {
     tweet(){
 
     },
+    // filterSex(gender === 'man'){
+    //   /ortして女のIDとnameをとってくる
+    // },
+
+    // display() {
+    //   this.random = Math.floor(Math.random() * this.id.length);
+    //   IDに紐づく名前を表示
+    // }
   }
 };
 </script>
