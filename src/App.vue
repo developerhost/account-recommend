@@ -1,77 +1,93 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center"></div>
-    </v-app-bar>
-
-    <v-main>
+    <v-container class="bg">
       <div id="app">
         <h1 align="center" class="my-5">裏垢リコメンダー</h1>
-        <v-card class="mx-auto my-5" max-width="450">
-          <v-layout wrap>
-            <p>あなたのアカウント名は？</p>
-            <input class="ml-15 hoge" v-model="name" placeholder="名前を入力" />
-          </v-layout>
-        </v-card>
+        <v-layout wrap>
+          <p class="mt-1">アカウント名</p>
+          <v-text-field
+            class="ml-15 mt-0 pt-0"
+            v-model="name"
+            placeholder="名前を入力"
+          />
+        </v-layout>
 
-        <v-card class="mx-auto my-5" max-width="450">
-          <v-layout wrap>
-            <p>あなたのアカウントIDは？</p>
-            <input
-              class="ml-15"
-              v-model="id"
-              value="@"
-              placeholder="IDを入力(@つけてね)"
-            />
-          </v-layout>
-        </v-card>
+        <v-layout wrap>
+          <p class="mt-1">アカウントID</p>
+          <v-text-field
+            class="ml-15 pt-0"
+            v-model="id"
+            value="@"
+            placeholder="IDを入力(@つけてね)"
+          />
+        </v-layout>
 
-        <v-card class="mx-auto my-5" max-width="450">
-          <v-layout wrap>
-            <label>
-              <input type="radio" value="man" v-model="gender" />男
-            </label>
-            <label>
-              <input type="radio" value="woman" v-model="gender" />女
-            </label>
-          </v-layout>
-        </v-card>
+        <v-layout wrap>
+          <label> <input type="radio" value="man" v-model="gender" />男 </label>
+          <label>
+            <input type="radio" value="woman" v-model="gender" />女
+          </label>
+        </v-layout>
 
-        <v-card class="mx-auto" max-width="344">
-          <v-col align="center">
-            <v-btn
-              :disabled="!id || !gender"
-              depressed
-              color="primary"
-              @click="asessment()"
-              >診断</v-btn
-            >
-            <v-btn
-              :disabled="!id || !gender"
-              class="ml-15"
-              depressed
-              color="primary"
-              @click="tweet()"
-              >ツイート</v-btn
-            >
-          </v-col>
-        </v-card>
+        <v-layout wrap>
+          <p class="mt-5">どんなアカウントとマッチしたい？</p>
+          <v-textarea filled auto-grow label="詳細" v-model="detail">
+          </v-textarea>
+        </v-layout>
 
-        <!-- 
-        <ul>
-          <li v-for="(account, key) in accounts" :key="key">
-            {{ account.name }}
-            {{ account.id }}
-            {{ account.gender }}
-          </li>
-        </ul> -->
+        <div class="text-center">
+          <v-dialog v-model="dialog" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                :disabled="!id || !gender"
+                depressed
+                color="red lighten-2"
+                dark
+                x-large
+                v-bind="attrs"
+                v-on="on"
+                @click="asessment()"
+              >
+                診断
+              </v-btn>
+            </template>
 
-        <h2 v-if="account.name" class="text-center">
-          おすすめの裏垢は{{ account && account.name }}です
-        </h2>
-        <h2 align="center" justify="center">{{ account && account.id }}</h2>
+            <v-card>
+              <v-card-title class="headline grey lighten-2">
+                おすすめのアカウントは
+              </v-card-title>
+
+              <v-card-text>
+                <h2 v-if="account.name" class="text-center mt-3">
+                  {{ this.account && this.account.name }}
+                </h2>
+                <h2 align="center" justify="center">
+                  {{ this.account && this.account.id }}
+                </h2>
+              </v-card-text>
+
+              <p justify="center" class="text-center mb-5">
+                🎉結果をツイートしよう🎉
+              </p>
+              <div class="text-center">
+                <v-btn large class="mb-2" color="primary" @click="tweet()"
+                  >ツイート</v-btn
+                >
+              </div>
+
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="dialog = false" depressed>
+                  閉じる
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
       </div>
-    </v-main>
+    </v-container>
   </v-app>
 </template>
 
@@ -94,6 +110,7 @@ export default {
     name: "",
     id: "",
     gender: "",
+    detail: "",
     db: null,
     accountsRef: null,
     accounts: [], //取得したデータを入れる
@@ -167,5 +184,12 @@ input {
   border: 1px solid #000;
   border-style: solid !important;
   margin: 8px;
+}
+.bg {
+  background-image: url("~@/assets/23b1f26018f047bce04e17849423bfb8_t.jpeg");
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100vh;
 }
 </style>
