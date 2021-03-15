@@ -2,6 +2,7 @@
   <v-app>
     <v-container class="bg">
       <div id="app">
+        <link-prevue url="~@/assets/市販の - 旅行ブログ、タイトル、iPhoneのレイアウト.png"></link-prevue>
         <h1 align="center" class="my-5">裏垢リコメンダー</h1>
         <v-layout wrap>
           <p class="mt-1">アカウント名</p>
@@ -93,7 +94,11 @@
 
 <script>
 import firebase from "firebase";
+import LinkPrevue from 'link-prevue'
 export default {
+  components: {
+    LinkPrevue
+  },
   name: "App",
   created() {
     this.db = firebase.firestore();
